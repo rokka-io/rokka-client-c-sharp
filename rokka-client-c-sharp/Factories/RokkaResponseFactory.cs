@@ -13,7 +13,8 @@ public class RokkaResponseFactory
         ContractResolver = new DefaultContractResolver
         {
             NamingStrategy = new SnakeCaseNamingStrategy()
-        }
+        },
+        MissingMemberHandling = MissingMemberHandling.Error
     };
     
     public async Task<RokkaResponse> BuildRokkaResponse(HttpResponseMessage httpResponseMessage)
@@ -26,8 +27,19 @@ public class RokkaResponseFactory
     private async Task<T> DeserializeBody<T>(HttpResponseMessage httpResponseMessage) where T : new()
     {
         var bodyString = await httpResponseMessage.Content.ReadAsStringAsync();
-        var deserializeObject = JsonConvert.DeserializeObject<T>(bodyString, _jsonSerializerSettings);
-        return deserializeObject ?? new T();
+        try
+        {
+            var deserializeObject = JsonConvert.DeserializeObject<T>(bodyString, _jsonSerializerSettings);
+            return deserializeObject ?? new T();
+        }
+        catch (JsonReaderException e)
+        {
+            throw new RokkaClientException($"Response from Rokka is not JSON. Reason: {e.Message}");
+        }
+        catch (JsonSerializationException e)
+        {
+            throw new RokkaClientException($"Unknown JSON response from Rokka. Reason: {e.Message}");
+        }
     }
 
     private async Task<RokkaResponse> BuildSuccessResponse(HttpResponseMessage httpResponseMessage)

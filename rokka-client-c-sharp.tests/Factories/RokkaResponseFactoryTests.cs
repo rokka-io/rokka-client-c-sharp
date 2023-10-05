@@ -23,6 +23,30 @@ public class RokkaResponseFactoryTests
         };
     }
     
+    private static HttpResponseMessage CreateNonJsonResponseMessage()
+    {
+        const string responseString = "not json";
+        
+        return new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            ReasonPhrase = SuccessReasonPhrase,
+            Content = new StringContent(responseString)
+        };
+    }
+    
+    private static HttpResponseMessage CreateUnknownSuccessResponseMessage()
+    {
+        const string responseString = "{\"unknown_property\":\"unknown_value\"}";
+        
+        return new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            ReasonPhrase = SuccessReasonPhrase,
+            Content = new StringContent(responseString)
+        };
+    }
+    
     private static HttpResponseMessage CreateErrorResponseMessage()
     {
         const string responseString = "{\n  \"code\": 403,\n  \"message\": \"API credentials are not supplied or not a valid format.\",\n  \"invalid_authentication\": true\n}";
@@ -185,5 +209,23 @@ public class RokkaResponseFactoryTests
         
         var error = response.Error;
         Assert.Equivalent(expectedError, error);
+    }
+    
+    [Fact]
+    public async void GivenAnNonJsonResponse_WhenBuildRokkaResponse_ThrowsException()
+    {
+        var responseMessage = CreateNonJsonResponseMessage();
+        
+        await Assert.ThrowsAsync<RokkaClientException>( () => new RokkaResponseFactory().BuildRokkaResponse(responseMessage));
+
+    }
+    
+    [Fact]
+    public async void GivenAnUnknownSuccessResponse_WhenBuildRokkaResponse_ThrowsException()
+    {
+        var responseMessage = CreateUnknownSuccessResponseMessage();
+        
+        await Assert.ThrowsAsync<RokkaClientException>( () => new RokkaResponseFactory().BuildRokkaResponse(responseMessage));
+
     }
 }
