@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using rokka_client_c_sharp.Models;
 
 namespace rokka_client_c_sharp.Factories;
 
