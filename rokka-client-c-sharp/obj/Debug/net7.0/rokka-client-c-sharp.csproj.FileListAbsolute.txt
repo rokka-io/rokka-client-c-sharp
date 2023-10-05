@@ -1,0 +1,12 @@
+/Users/benoitpotty/Documents/projects/rokka/rokka-client-c-sharp/bin/Debug/net7.0/rokka-client-c-sharp.deps.json
+/Users/benoitpotty/Documents/projects/rokka/rokka-client-c-sharp/bin/Debug/net7.0/rokka-client-c-sharp.dll
+/Users/benoitpotty/Documents/projects/rokka/rokka-client-c-sharp/bin/Debug/net7.0/rokka-client-c-sharp.pdb
+/Users/benoitpotty/Documents/projects/rokka/rokka-client-c-sharp/obj/Debug/net7.0/rokka-client-c-sharp.csproj.AssemblyReference.cache
+/Users/benoitpotty/Documents/projects/rokka/rokka-client-c-sharp/obj/Debug/net7.0/rokka-client-c-sharp.GeneratedMSBuildEditorConfig.editorconfig
+/Users/benoitpotty/Documents/projects/rokka/rokka-client-c-sharp/obj/Debug/net7.0/rokka-client-c-sharp.AssemblyInfoInputs.cache
+/Users/benoitpotty/Documents/projects/rokka/rokka-client-c-sharp/obj/Debug/net7.0/rokka-client-c-sharp.AssemblyInfo.cs
+/Users/benoitpotty/Documents/projects/rokka/rokka-client-c-sharp/obj/Debug/net7.0/rokka-client-c-sharp.csproj.CoreCompileInputs.cache
+/Users/benoitpotty/Documents/projects/rokka/rokka-client-c-sharp/obj/Debug/net7.0/rokka-client-c-sharp.dll
+/Users/benoitpotty/Documents/projects/rokka/rokka-client-c-sharp/obj/Debug/net7.0/refint/rokka-client-c-sharp.dll
+/Users/benoitpotty/Documents/projects/rokka/rokka-client-c-sharp/obj/Debug/net7.0/rokka-client-c-sharp.pdb
+/Users/benoitpotty/Documents/projects/rokka/rokka-client-c-sharp/obj/Debug/net7.0/ref/rokka-client-c-sharp.dll
