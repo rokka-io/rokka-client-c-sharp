@@ -14,4 +14,8 @@ public class ImageInfos
     public int Height { get; set; }
     public string Organization { get; set; } = string.Empty;
     public string Link { get; set; } = string.Empty;
+    public bool Protected { get; set; }
+    public bool Locked { get; set; }
+    public double Entropy { get; set; }
+    public bool Opaque { get; set; } = true;
 }
