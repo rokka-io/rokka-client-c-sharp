@@ -4,11 +4,11 @@ namespace rokka_client_c_sharp.Models;
 
 public class RokkaErrorResponse: RokkaResponse
 {
-    private Error Error { get; }
+    public Error Error { get; }
     public RokkaErrorResponse(HttpStatusCode statusCode, string statusMessage, Error error) : base(statusCode, statusMessage)
     {
         Error = error;
     }
 
-    public override string DetailedMessage => Error?.Message;
+    public override string DetailedMessage => Error.Message ?? string.Empty;
 }

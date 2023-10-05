@@ -16,7 +16,7 @@ public class RokkaResponseFactory
     
     public async Task<RokkaResponse> BuildRokkaResponse(HttpResponseMessage httpResponseMessage)
     {
-        if (httpResponseMessage is null) return null;
+        if (httpResponseMessage is null) throw new RokkaClientException("HTTPResponseMessage cannot be null");
 
         return !httpResponseMessage.IsSuccessStatusCode ? await BuildErrorResponse(httpResponseMessage) : await BuildSuccessResponse(httpResponseMessage);
     }
