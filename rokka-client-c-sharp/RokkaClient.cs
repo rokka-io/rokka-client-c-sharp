@@ -8,14 +8,12 @@ public class RokkaClient : IRokkaClient
 {
     private readonly RokkaConfiguration _configuration;
     private readonly HttpClient _apiHttpClient = new() { BaseAddress = new Uri("https://api.rokka.io")};
-    private readonly HttpClient _renderHttpClient;
     private readonly RokkaResponseFactory _responseFactory;
 
     
     public RokkaClient(RokkaConfiguration configuration)
     {
         _configuration = configuration;
-        _renderHttpClient = new() { BaseAddress = new Uri($"https://{_configuration.Organization}.rokka.io")};
         _responseFactory = new();
     }
 
