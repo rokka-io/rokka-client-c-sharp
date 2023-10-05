@@ -40,7 +40,7 @@ public class RokkaResponseFactoryTests
     {
         HttpResponseMessage? responseMessage = null;
         
-       await Assert.ThrowsAsync<RokkaClientException>( () => new RokkaResponseFactory().BuildRokkaResponse(responseMessage));
+       await Assert.ThrowsAsync<RokkaClientException>( () => new RokkaResponseFactory().BuildRokkaResponse(responseMessage!));
     }
     
     [Fact]

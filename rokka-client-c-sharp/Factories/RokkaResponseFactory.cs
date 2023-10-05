@@ -6,6 +6,8 @@ namespace rokka_client_c_sharp.Factories;
 
 public class RokkaResponseFactory
 {
+    private const string UnknownReason = "Unspecified";
+    
     private readonly JsonSerializerSettings _jsonSerializerSettings = new()
     {
         ContractResolver = new DefaultContractResolver
@@ -21,21 +23,22 @@ public class RokkaResponseFactory
         return !httpResponseMessage.IsSuccessStatusCode ? await BuildErrorResponse(httpResponseMessage) : await BuildSuccessResponse(httpResponseMessage);
     }
 
-    private async Task<T> DeserializeBody<T>(HttpResponseMessage httpResponseMessage) 
+    private async Task<T> DeserializeBody<T>(HttpResponseMessage httpResponseMessage) where T : new()
     {
         var bodyString = await httpResponseMessage.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<T>(bodyString, _jsonSerializerSettings);
+        var deserializeObject = JsonConvert.DeserializeObject<T>(bodyString, _jsonSerializerSettings);
+        return deserializeObject ?? new T();
     }
 
     private async Task<RokkaResponse> BuildSuccessResponse(HttpResponseMessage httpResponseMessage)
     {
         var body = await DeserializeBody<RokkaListResponseBody>(httpResponseMessage);
-        return new RokkaSuccessResponse(httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase, body);
+        return new RokkaSuccessResponse(httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase ?? UnknownReason, body);
     }
 
     private async Task<RokkaResponse> BuildErrorResponse(HttpResponseMessage httpResponseMessage)
     {
         var error = await DeserializeBody<Error>(httpResponseMessage);
-        return new RokkaErrorResponse(httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase, error);
+        return new RokkaErrorResponse(httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase ?? UnknownReason, error);
     }
 }
