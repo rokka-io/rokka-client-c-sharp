@@ -12,7 +12,8 @@ public class RokkaClientTests
     private const string RenderStack = "ROKKA_STACK";
     private Mock<HttpMessageHandler>? _msgHandler;
 
-    private Mock<HttpMessageHandler> GetMockedHandler(Func<HttpRequestMessage, bool>? assertRequest = null, HttpResponseMessage? response = null)
+    private Mock<HttpMessageHandler> GetMockedHandler(Func<HttpRequestMessage, bool>? assertRequest = null,
+        HttpResponseMessage? response = null)
     {
         var messageHandler = new Mock<HttpMessageHandler>();
         var protectedMock = messageHandler.Protected();
@@ -28,9 +29,17 @@ public class RokkaClientTests
             Content = new StringContent("{}")
         };
         var apiMockedResponse = setupApiRequest.ReturnsAsync(httpResponseMessage);
-        
+
         apiMockedResponse.Verifiable();
         return messageHandler;
+    }
+
+    private RokkaClient CreateRokkaClient()
+    {
+        return new RokkaClient(new RokkaConfiguration
+        {
+            Organization = Organization, Key = Key, RenderStack = RenderStack
+        }, _msgHandler.Object);
     }
 
     [Fact]
@@ -38,28 +47,22 @@ public class RokkaClientTests
     {
         _msgHandler = GetMockedHandler(request => request.Headers.GetValues("Api-Key").FirstOrDefault() == Key);
         
-        var client = new RokkaClient(new RokkaConfiguration()
-        {
-            Organization = Organization, Key = Key, RenderStack = RenderStack
-        }, _msgHandler.Object );
+        var client = CreateRokkaClient();
 
-       await client.CreateSourceImage("file.jpg", Array.Empty<byte>());
-       
-       _msgHandler.VerifyAll();
+        await client.CreateSourceImage("file.jpg", Array.Empty<byte>());
+
+        _msgHandler.VerifyAll();
     }
-    
+
     [Fact]
     public async void GivenAConfiguration_WhenCreateImageSource_ThenCorrectApiVersionIsInTheHeader()
     {
-        _msgHandler = _msgHandler = GetMockedHandler(request => request.Headers.GetValues("Api-Version").FirstOrDefault() == "1");
-        
-        var client = new RokkaClient(new RokkaConfiguration()
-        {
-            Organization = Organization, Key = Key, RenderStack = RenderStack
-        }, _msgHandler.Object );
+        _msgHandler = GetMockedHandler(request => request.Headers.GetValues("Api-Version").FirstOrDefault() == "1");
+
+        var client = CreateRokkaClient();
 
         await client.CreateSourceImage("file.jpg", Array.Empty<byte>());
-       
+
         _msgHandler.VerifyAll();
     }
 }
