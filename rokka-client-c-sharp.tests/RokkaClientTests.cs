@@ -12,21 +12,22 @@ public class RokkaClientTests
     private const string RenderStack = "ROKKA_STACK";
     private Mock<HttpMessageHandler>? _msgHandler;
 
-    private Mock<HttpMessageHandler> GetMockedHandler(Func<HttpRequestMessage, bool> assertRequest)
+    private Mock<HttpMessageHandler> GetMockedHandler(Func<HttpRequestMessage, bool>? assertRequest = null, HttpResponseMessage? response = null)
     {
         var messageHandler = new Mock<HttpMessageHandler>();
         var protectedMock = messageHandler.Protected();
         var setupApiRequest = protectedMock.Setup<Task<HttpResponseMessage>>(
             "SendAsync",
-            ItExpr.Is<HttpRequestMessage>(m => assertRequest(m)),
+            ItExpr.Is<HttpRequestMessage>(m => assertRequest == null || assertRequest(m)),
             ItExpr.IsAny<CancellationToken>()
         );
 
-        var apiMockedResponse = setupApiRequest.ReturnsAsync(new HttpResponseMessage()
+        var httpResponseMessage = response ?? new HttpResponseMessage()
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent("{}")
-        });
+        };
+        var apiMockedResponse = setupApiRequest.ReturnsAsync(httpResponseMessage);
         
         apiMockedResponse.Verifiable();
         return messageHandler;
