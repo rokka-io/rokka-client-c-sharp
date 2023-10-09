@@ -5,10 +5,23 @@
         <RootNamespace>rokka_client_c_sharp</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Title>Rokka C# SDK</Title>
+        <Authors>rokka.io</Authors>
+        <Copyright>rokka.io</Copyright>
+        <PackageProjectUrl>https://rokka.io</PackageProjectUrl>
+        <PackageIcon>favicon-32x32.png</PackageIcon>
+        <RepositoryUrl>https://github.com/rokka-io/rokka-client-c-sharp</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="favicon-32x32.png">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
     </ItemGroup>
 
 </Project>
