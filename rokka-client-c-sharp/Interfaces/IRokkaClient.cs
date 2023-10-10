@@ -4,5 +4,5 @@ namespace rokka_client_c_sharp.Interfaces;
 
 public interface IRokkaClient
 {
-    Task<RokkaResponse> CreateSourceImage(string fileName, byte[] bytes);
+    public SourceImageEndpoint SourceImages { get; }
 }

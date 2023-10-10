@@ -12,7 +12,7 @@ public class RequestExecutorTests: RokkaClientTestsBase
     [Fact]
     public async void GivenAConfiguration_WhenCreateImageSource_ThenCorrectApiKeyIsInTheHeader()
     {
-        MockHttpHandler(request => request.Headers.GetValues("Api-Key").FirstOrDefault() == Key);
+        MockHttpHandler(AssertHeader("Api-Key", Key));
         var requestExecutor = CreateRequestExecutor();
         var request = new HttpRequestMessage(HttpMethod.Options, "/");
 
@@ -24,7 +24,7 @@ public class RequestExecutorTests: RokkaClientTestsBase
     [Fact]
     public async void GivenAConfiguration_WhenCreateImageSource_ThenCorrectApiVersionIsInTheHeader()
     {
-        MockHttpHandler(request => request.Headers.GetValues("Api-Version").FirstOrDefault() == "1");
+        MockHttpHandler(AssertHeader("Api-Version","1"));
         var requestExecutor = CreateRequestExecutor();
         var request = new HttpRequestMessage(HttpMethod.Options, "/");
 

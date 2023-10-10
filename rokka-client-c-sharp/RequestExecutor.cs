@@ -3,7 +3,7 @@ using rokka_client_c_sharp.Factories;
 
 namespace rokka_client_c_sharp;
 
-internal class RequestExecutor
+public class RequestExecutor
 {
     private readonly RokkaConfiguration _configuration;
     private readonly HttpClient _apiHttpClient;
