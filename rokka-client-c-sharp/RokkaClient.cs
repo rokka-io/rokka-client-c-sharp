@@ -14,13 +14,14 @@ public class RokkaClient : IRokkaClient
 
     private RokkaClient(RokkaConfiguration configuration, HttpClient httpClient)
     {
+        if (configuration is null || !configuration.IsValid) throw new RokkaClientException("Rokka Client configuration is invalid");
+        
         _configuration = configuration;
         _apiHttpClient = httpClient;
         _responseFactory = new();
     }
     public RokkaClient(RokkaConfiguration configuration): this(configuration, new HttpClient() {BaseAddress = ApiUri})
     {
-        _configuration = configuration;
     }
     
     internal RokkaClient(RokkaConfiguration configuration, HttpMessageHandler httpMessageHandler): this(configuration, new HttpClient(httpMessageHandler) {BaseAddress = ApiUri})

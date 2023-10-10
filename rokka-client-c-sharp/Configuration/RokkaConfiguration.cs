@@ -6,6 +6,7 @@ public class RokkaConfiguration
     public string Organization { get; set; } = string.Empty;
     public string RenderStack { get; set; } = string.Empty;
 
-    public bool IsValid => !string.IsNullOrEmpty(Key) && !string.IsNullOrEmpty(Organization) ||
-                           !string.IsNullOrEmpty(RenderStack);
+    public bool IsValid =>    !string.IsNullOrEmpty(Key) 
+                           && !string.IsNullOrEmpty(Organization) 
+                           && !string.IsNullOrEmpty(RenderStack);
 }
