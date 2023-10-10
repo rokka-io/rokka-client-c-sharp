@@ -1,39 +1,26 @@
-﻿using System.Runtime.CompilerServices;
-using rokka_client_c_sharp.Configuration;
-using rokka_client_c_sharp.Factories;
+﻿using rokka_client_c_sharp.Configuration;
 using rokka_client_c_sharp.Interfaces;
 
 namespace rokka_client_c_sharp;
 
 public class RokkaClient : IRokkaClient
 {
+    public static readonly Uri ApiUri = new("https://api.rokka.io");
+    private readonly RequestExecutor _requestExecutor;
     private readonly RokkaConfiguration _configuration;
-    private static readonly Uri ApiUri = new("https://api.rokka.io");
-    private readonly HttpClient _apiHttpClient;
-    private readonly RokkaResponseFactory _responseFactory;
 
     private RokkaClient(RokkaConfiguration configuration, HttpClient httpClient)
     {
         if (configuration is null || !configuration.IsValid) throw new RokkaClientException("Rokka Client configuration is invalid");
-        
         _configuration = configuration;
-        _apiHttpClient = httpClient;
-        _responseFactory = new();
+        _requestExecutor = new RequestExecutor(configuration, httpClient);
     }
-    public RokkaClient(RokkaConfiguration configuration): this(configuration, new HttpClient() {BaseAddress = ApiUri})
+    public RokkaClient(RokkaConfiguration configuration): this(configuration, new HttpClient {BaseAddress = ApiUri})
     {
     }
     
     internal RokkaClient(RokkaConfiguration configuration, HttpMessageHandler httpMessageHandler): this(configuration, new HttpClient(httpMessageHandler) {BaseAddress = ApiUri})
     {
-    }
-
-    private async Task<RokkaResponse> PerformRequest(HttpRequestMessage request)
-    {
-        request.Headers.Add("Api-Version", "1");
-        request.Headers.Add("Api-Key", _configuration.Key);
-        var response = await _apiHttpClient.SendAsync(request);
-        return await _responseFactory.BuildRokkaResponse(response);
     }
 
     public async Task<RokkaResponse> CreateSourceImage(string fileName, byte[] bytes)
@@ -43,6 +30,6 @@ public class RokkaClient : IRokkaClient
         content.Add(new ByteArrayContent(bytes), "filedata", fileName);
         content.Add(new StringContent(fileName), "fileName");
         request.Content = content;
-        return await PerformRequest(request);
+        return await _requestExecutor.PerformRequest(request);
     }
 }
