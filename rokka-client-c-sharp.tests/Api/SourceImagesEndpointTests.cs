@@ -138,4 +138,19 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
     
         MessageHandler!.VerifyAll();
     }
+    
+    [Fact]
+    public async void GivenCreateMetadataWithOptionsMetadataBinaryHash_WhenCreate_CorrectFormContentIsSent()
+    {
+        var options = new MetaDataOptions() { { "id", "unit_test" } };
+        options.VisualBinaryhash = true;
+        var metadata = new CreateMetadata { Options = options };
+        MockHttpHandler(AssertFormDataStringContent("options", "{\"id\":\"unit_test\",\"visual_binaryhash\":true}"));
+    
+        var client = CreateRokkaClient();
+    
+        await client.SourceImages.Create(FileName, _bytes, metadata: metadata);
+    
+        MessageHandler!.VerifyAll();
+    }
 }

@@ -1,20 +1,11 @@
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using rokka_client_c_sharp.Extensions;
 
 namespace rokka_client_c_sharp.Factories;
 
 public class RokkaResponseFactory
 {
     private const string UnknownReason = "Unspecified";
-    
-    private readonly JsonSerializerSettings _jsonSerializerSettings = new()
-    {
-        ContractResolver = new DefaultContractResolver
-        {
-            NamingStrategy = new SnakeCaseNamingStrategy()
-        },
-        MissingMemberHandling = MissingMemberHandling.Error
-    };
     
     public async Task<RokkaResponse> BuildRokkaResponse(HttpResponseMessage httpResponseMessage)
     {
@@ -28,7 +19,7 @@ public class RokkaResponseFactory
         var bodyString = await httpResponseMessage.Content.ReadAsStringAsync();
         try
         {
-            var deserializeObject = JsonConvert.DeserializeObject<T>(bodyString, _jsonSerializerSettings);
+            var deserializeObject = JsonConvert.DeserializeObject<T>(bodyString, StringExtension.JsonSerializerSettings);
             return deserializeObject ?? new T();
         }
         catch (JsonReaderException e)
