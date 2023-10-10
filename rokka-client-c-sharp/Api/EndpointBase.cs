@@ -1,6 +1,6 @@
 using rokka_client_c_sharp.Configuration;
 
-namespace rokka_client_c_sharp;
+namespace rokka_client_c_sharp.Api;
 
 public abstract class EndpointBase
 {

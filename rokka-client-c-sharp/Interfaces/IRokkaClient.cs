@@ -1,3 +1,4 @@
+using rokka_client_c_sharp.Api;
 using rokka_client_c_sharp.Models;
 
 namespace rokka_client_c_sharp.Interfaces;
