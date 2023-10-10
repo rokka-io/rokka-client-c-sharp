@@ -96,7 +96,7 @@ public class RokkaResponseFactoryTests
         
         var response = await new RokkaResponseFactory().BuildRokkaResponse(responseMessage);
 
-        Assert.IsType<RokkaSuccessResponse>(response);
+        Assert.IsType<SourceImagesListResponse>(response);
     }
     
     [Fact]
@@ -104,7 +104,7 @@ public class RokkaResponseFactoryTests
     {
         var responseMessage = CreateSuccessResponseMessage();
         
-        var response = await new RokkaResponseFactory().BuildRokkaResponse(responseMessage) as RokkaSuccessResponse;
+        var response = await new RokkaResponseFactory().BuildRokkaResponse(responseMessage) as SourceImagesListResponse;
 
         Assert.NotNull(response);
         Assert.False(response.IsError);
@@ -114,7 +114,7 @@ public class RokkaResponseFactoryTests
     public async void GivenASuccessListResponse_WhenBuildRokkaResponse_BodyIsCorrect()
     {
         var responseMessage = CreateSuccessResponseMessage();
-        var expectedItems = new List<ImageInfos>
+        var expectedItems = new List<SourceImage>
         {
             new()
             {
@@ -137,7 +137,7 @@ public class RokkaResponseFactoryTests
             }
         };
         
-        var response = await new RokkaResponseFactory().BuildRokkaResponse(responseMessage) as RokkaSuccessResponse;
+        var response = await new RokkaResponseFactory().BuildRokkaResponse(responseMessage) as SourceImagesListResponse;
 
         Assert.NotNull(response);
         Assert.NotNull(response.Body);

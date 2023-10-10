@@ -34,8 +34,8 @@ public class RokkaResponseFactory
 
     private async Task<RokkaResponse> BuildSuccessResponse(HttpResponseMessage httpResponseMessage)
     {
-        var body = await DeserializeBody<RokkaListResponseBody>(httpResponseMessage);
-        return new RokkaSuccessResponse(httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase ?? UnknownReason, body);
+        var body = await DeserializeBody<SourceImagesListResponseBody>(httpResponseMessage);
+        return new SourceImagesListResponse(httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase ?? UnknownReason, body);
     }
 
     private async Task<RokkaResponse> BuildErrorResponse(HttpResponseMessage httpResponseMessage)
