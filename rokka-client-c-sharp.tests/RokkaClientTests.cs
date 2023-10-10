@@ -94,4 +94,16 @@ public class RokkaClientTests
     {
         Assert.Throws<RokkaClientException>(() => new RokkaClient(null!));
     }
+    
+    [Fact]
+    public void GivenAValidConfiguration_WhenCreateClient_NoExceptionIsThrown()
+    {
+        var configuration = new RokkaConfiguration
+            { Key = Key, Organization = Organization, RenderStack = RenderStack };
+        
+        var client = new RokkaClient(configuration);
+        
+        Assert.NotNull(client);
+    }
+    
 }
