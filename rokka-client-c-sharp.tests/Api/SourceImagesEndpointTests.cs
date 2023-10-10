@@ -153,4 +153,19 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
     
         MessageHandler!.VerifyAll();
     }
+    
+    [Fact]
+    public async void GivenCreateMetadataWithOptionsMetadataProtected_WhenCreate_CorrectFormContentIsSent()
+    {
+        var options = new MetaDataOptions() { { "id", "unit_test" } };
+        options.Protected = false;
+        var metadata = new CreateMetadata { Options = options };
+        MockHttpHandler(AssertFormDataStringContent("options", "{\"id\":\"unit_test\",\"protected\":false}"));
+    
+        var client = CreateRokkaClient();
+    
+        await client.SourceImages.Create(FileName, _bytes, metadata: metadata);
+    
+        MessageHandler!.VerifyAll();
+    }
 }
