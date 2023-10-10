@@ -16,7 +16,7 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
 
         await client.SourceImages.Create(FileName, Array.Empty<byte>());
 
-        _msgHandler!.VerifyAll();
+        MessageHandler!.VerifyAll();
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
     
         await client.SourceImages.Create(FileName, _bytes);
     
-        _msgHandler!.VerifyAll();
+        MessageHandler!.VerifyAll();
     }
     
     [Fact]
@@ -40,7 +40,7 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
     
         await client.SourceImages.Create(FileName, _bytes);
     
-        _msgHandler!.VerifyAll();
+        MessageHandler!.VerifyAll();
     }
     
     [Fact]
@@ -52,6 +52,6 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
     
         await client.SourceImages.Create(FileName, _bytes);
     
-        _msgHandler!.VerifyAll();
+        MessageHandler!.VerifyAll();
     }
 }

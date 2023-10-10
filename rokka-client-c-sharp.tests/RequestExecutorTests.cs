@@ -4,9 +4,9 @@ public class RequestExecutorTests: RokkaClientTestsBase
 {
     private RequestExecutor CreateRequestExecutor()
     {
-        if (_msgHandler == null) MockHttpHandler();
+        if (MessageHandler == null) MockHttpHandler();
 
-        return new RequestExecutor(Configuration, new HttpClient(_msgHandler!.Object) {BaseAddress = RokkaClient.ApiUri});
+        return new RequestExecutor(Configuration, new HttpClient(MessageHandler!.Object) {BaseAddress = RokkaClient.ApiUri});
     }
     
     [Fact]
@@ -18,7 +18,7 @@ public class RequestExecutorTests: RokkaClientTestsBase
 
         await requestExecutor.PerformRequest(request);
 
-        _msgHandler!.VerifyAll();
+        MessageHandler!.VerifyAll();
     }
 
     [Fact]
@@ -30,6 +30,6 @@ public class RequestExecutorTests: RokkaClientTestsBase
 
         await requestExecutor.PerformRequest(request);
 
-        _msgHandler!.VerifyAll();
+        MessageHandler!.VerifyAll();
     }
 }

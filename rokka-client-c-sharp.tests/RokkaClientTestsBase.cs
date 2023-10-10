@@ -7,7 +7,7 @@ namespace rokka_client_c_sharp.tests;
 
 public abstract class RokkaClientTestsBase
 {
-    protected Mock<HttpMessageHandler>? _msgHandler;
+    protected Mock<HttpMessageHandler>? MessageHandler;
     protected const string Organization = "ROKKA";
     protected const string Key = "ROKKA_KEY";
     protected const string RenderStack = "ROKKA_STACK";
@@ -17,8 +17,8 @@ public abstract class RokkaClientTestsBase
     protected void MockHttpHandler(Func<HttpRequestMessage, bool>? assertRequest = null,
         HttpResponseMessage? response = null)
     {
-        _msgHandler = new Mock<HttpMessageHandler>();
-        var protectedMock = _msgHandler.Protected();
+        MessageHandler = new Mock<HttpMessageHandler>();
+        var protectedMock = MessageHandler.Protected();
         var setupApiRequest = protectedMock.Setup<Task<HttpResponseMessage>>(
             "SendAsync",
             ItExpr.Is<HttpRequestMessage>(m => assertRequest == null || assertRequest(m)),
@@ -37,9 +37,9 @@ public abstract class RokkaClientTestsBase
 
     protected RokkaClient CreateRokkaClient()
     {
-        if (_msgHandler == null) MockHttpHandler();
+        if (MessageHandler == null) MockHttpHandler();
 
-        return new RokkaClient(Configuration, _msgHandler!.Object);
+        return new RokkaClient(Configuration, MessageHandler!.Object);
     }
 
     protected static Func<HttpRequestMessage, bool> AssertHeader(string name, string value)
@@ -72,7 +72,6 @@ public abstract class RokkaClientTestsBase
             
         };
     }
-    
     
     protected static Func<HttpRequestMessage, bool> AssertEndpoint(string endpoint)
     {
