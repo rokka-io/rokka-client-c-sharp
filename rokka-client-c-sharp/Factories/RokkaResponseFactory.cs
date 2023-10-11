@@ -1,3 +1,4 @@
+using System.Net;
 using Newtonsoft.Json;
 using rokka_client_c_sharp.Extensions;
 
@@ -14,13 +15,13 @@ public class RokkaResponseFactory
         return !httpResponseMessage.IsSuccessStatusCode ? await BuildErrorResponse(httpResponseMessage) : await BuildSuccessResponse(httpResponseMessage);
     }
 
-    private async Task<T> DeserializeBody<T>(HttpResponseMessage httpResponseMessage) where T : new()
+    private async Task<T> DeserializeBody<T>(HttpResponseMessage httpResponseMessage)
     {
         var bodyString = await httpResponseMessage.Content.ReadAsStringAsync();
         try
         {
             var deserializeObject = JsonConvert.DeserializeObject<T>(bodyString, StringExtension.JsonSerializerSettings);
-            return deserializeObject ?? new T();
+            return deserializeObject!;
         }
         catch (JsonReaderException e)
         {
@@ -40,7 +41,18 @@ public class RokkaResponseFactory
 
     private async Task<RokkaResponse> BuildErrorResponse(HttpResponseMessage httpResponseMessage)
     {
-        var error = await DeserializeBody<Error>(httpResponseMessage);
-        return new RokkaErrorResponse(httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase ?? UnknownReason, error);
+        RokkaResponse response;
+        try
+        {
+            var error = await DeserializeBody<Error>(httpResponseMessage);
+            return new RokkaErrorResponse(httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase ?? UnknownReason, error);
+        }
+        catch (RokkaClientException)
+        {
+            var errorResponse = await DeserializeBody<RokkaErrorResponse>(httpResponseMessage);
+            errorResponse.StatusCode = (HttpStatusCode)errorResponse.Error.Code;
+            errorResponse.StatusMessage = errorResponse.Error.Message;
+            return errorResponse;
+        }
     }
 }

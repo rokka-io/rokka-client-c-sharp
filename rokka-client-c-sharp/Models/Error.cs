@@ -4,5 +4,5 @@ public class Error
 {
     public int Code { get; set; }
     public string Message { get; set; } = string.Empty;
-    public bool InvalidAuthentication { get; set; }
+    public bool? InvalidAuthentication { get; set; }
 }

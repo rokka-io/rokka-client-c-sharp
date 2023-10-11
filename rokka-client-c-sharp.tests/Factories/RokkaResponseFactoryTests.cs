@@ -47,7 +47,7 @@ public class RokkaResponseFactoryTests
         };
     }
     
-    private static HttpResponseMessage CreateErrorResponseMessage()
+    private static HttpResponseMessage CreateErrorResponseMessage(string? overrideResponseString = null)
     {
         const string responseString = "{\n  \"code\": 403,\n  \"message\": \"API credentials are not supplied or not a valid format.\",\n  \"invalid_authentication\": true\n}";
         
@@ -55,7 +55,7 @@ public class RokkaResponseFactoryTests
         {
             StatusCode = HttpStatusCode.Forbidden,
             ReasonPhrase = ErrorReasonPhrase,
-            Content = new StringContent(responseString)
+            Content = new StringContent(overrideResponseString ?? responseString)
         };
     }
     
@@ -227,5 +227,22 @@ public class RokkaResponseFactoryTests
         
         await Assert.ThrowsAsync<RokkaClientException>( () => new RokkaResponseFactory().BuildRokkaResponse(responseMessage));
 
+    }
+    
+    [Fact]
+    public async void GivenAnError_WhenBuildRokkaResponse_ErrorIsReturned()
+    {
+        var errorString =
+            "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Field name \\\"AltText\\\" is not valid. Use alphanumeric lowercase characters only, max length: 54 chars\"\n  }\n}";
+    
+        var responseMessage = CreateErrorResponseMessage(errorString);
+
+        var result = await new RokkaResponseFactory().BuildRokkaResponse(responseMessage);
+
+        Assert.IsType<RokkaErrorResponse>(result);
+        var rokkaError = result as RokkaErrorResponse;
+        Assert.False(string.IsNullOrEmpty(rokkaError?.Error?.Message));
+        Assert.Equal(400, (int)result.StatusCode);
+        
     }
 }

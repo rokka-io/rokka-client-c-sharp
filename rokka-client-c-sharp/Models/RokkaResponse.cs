@@ -9,8 +9,8 @@ public abstract class RokkaResponse
         StatusCode = statusCode;
         StatusMessage = statusMessage;
     }
-    public HttpStatusCode StatusCode { get; protected set; }
-    public string StatusMessage { get; protected set; }
+    public HttpStatusCode StatusCode { get; set; }
+    public string StatusMessage { get; set; }
     public bool IsError => this is RokkaErrorResponse;
     public abstract string DetailedMessage { get; }
 
