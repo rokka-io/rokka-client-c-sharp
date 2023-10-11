@@ -72,7 +72,7 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
     public async void GivenAContentAndOptions_WhenCreate_CorrectFormContentIsSent()
     {
         var createOptions = new CreateOptions() { OptimizeSource = true };
-        MockHttpHandler(AssertFormDataStringContent("optimize_source", "true"));
+        MockHttpHandler(AssertStringContent("optimize_source", "true"));
     
         var client = CreateRokkaClient();
     
@@ -85,7 +85,7 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
     public async void GivenCreateMetadataWithUserMetadata_WhenCreate_CorrectFormContentIsSent()
     {
         var metadata = new CreateMetadata { MetaUser = new MetaDataUser { { "id", "unit_test"} } };
-        MockHttpHandler(AssertFormDataStringContent("meta_user", "{\"id\":\"unit_test\"}"));
+        MockHttpHandler(AssertStringContent("meta_user[0]", "{\"id\":\"unit_test\"}"));
     
         var client = CreateRokkaClient();
     
@@ -100,7 +100,7 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
         var metadataDynamic = new MetaDataDynamic() { { "id", "unit_test" } };
         metadataDynamic.CropArea = new Area { X = 2, Y = 4 };
         var metadata = new CreateMetadata { MetaDynamic = metadataDynamic };
-        MockHttpHandler(AssertFormDataStringContent("meta_dynamic", "{\"id\":\"unit_test\",\"crop_area\":{\"x\":2,\"y\":4}}"));
+        MockHttpHandler(AssertStringContent("meta_dynamic[0]", "{\"id\":\"unit_test\",\"crop_area\":{\"x\":2,\"y\":4}}"));
     
         var client = CreateRokkaClient();
     
@@ -115,7 +115,7 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
         var metadataDynamic = new MetaDataDynamic() { { "id", "unit_test" } };
         metadataDynamic.SubjectArea = new Area { X = 2, Y = 4, Width = 5, Height = 6};
         var metadata = new CreateMetadata { MetaDynamic = metadataDynamic };
-        MockHttpHandler(AssertFormDataStringContent("meta_dynamic", "{\"id\":\"unit_test\",\"subject_area\":{\"x\":2,\"y\":4,\"width\":5,\"height\":6}}"));
+        MockHttpHandler(AssertStringContent("meta_dynamic[0]", "{\"id\":\"unit_test\",\"subject_area\":{\"x\":2,\"y\":4,\"width\":5,\"height\":6}}"));
     
         var client = CreateRokkaClient();
     
@@ -130,7 +130,7 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
         var metadataDynamic = new MetaDataDynamic() { { "id", "unit_test" } };
         metadataDynamic.Version = new Models.MetaData.Version { Text = "sample_text" };
         var metadata = new CreateMetadata { MetaDynamic = metadataDynamic };
-        MockHttpHandler(AssertFormDataStringContent("meta_dynamic", "{\"id\":\"unit_test\",\"version\":{\"text\":\"sample_text\"}}"));
+        MockHttpHandler(AssertStringContent("meta_dynamic[0]", "{\"id\":\"unit_test\",\"version\":{\"text\":\"sample_text\"}}"));
     
         var client = CreateRokkaClient();
     
@@ -145,7 +145,7 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
         var options = new MetaDataOptions() { { "id", "unit_test" } };
         options.VisualBinaryhash = true;
         var metadata = new CreateMetadata { Options = options };
-        MockHttpHandler(AssertFormDataStringContent("options", "{\"id\":\"unit_test\",\"visual_binaryhash\":true}"));
+        MockHttpHandler(AssertStringContent("options[0]", "{\"id\":\"unit_test\",\"visual_binaryhash\":true}"));
     
         var client = CreateRokkaClient();
     
@@ -160,7 +160,21 @@ public class SourceImagesEndpointTests: RokkaClientTestsBase
         var options = new MetaDataOptions() { { "id", "unit_test" } };
         options.Protected = false;
         var metadata = new CreateMetadata { Options = options };
-        MockHttpHandler(AssertFormDataStringContent("options", "{\"id\":\"unit_test\",\"protected\":false}"));
+        MockHttpHandler(AssertStringContent("options[0]", "{\"id\":\"unit_test\",\"protected\":false}"));
+    
+        var client = CreateRokkaClient();
+    
+        await client.SourceImages.Create(FileName, _bytes, metadata: metadata);
+    
+        MessageHandler!.VerifyAll();
+    }
+    
+    [Fact]
+    public async void GivenCreateMetadataCustomStringMetadata_WhenCreate_CorrectFormContentIsSent()
+    {
+        var metadata = new CreateMetadata();
+        metadata.Add("StringMetadata", "Value");
+        MockHttpHandler(AssertStringContent("string_metadata[0]", "Value"));
     
         var client = CreateRokkaClient();
     

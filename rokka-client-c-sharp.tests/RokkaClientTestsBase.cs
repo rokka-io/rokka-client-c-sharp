@@ -54,7 +54,7 @@ public abstract class RokkaClientTestsBase
             if (request.Content is not MultipartFormDataContent content) return false;
             
             return content.Any(c => c is StringContent stringContent
-                                    && stringContent.Headers.ContentDisposition?.Name == name
+                                    && stringContent.Headers.ContentDisposition?.Name?.Replace("\"", "") == name
                                     && stringContent.ReadAsStringAsync().Result == value);
             
         };
@@ -81,23 +81,5 @@ public abstract class RokkaClientTestsBase
     protected static Func<HttpRequestMessage, bool> AssertHttpMethod(HttpMethod method)
     {
         return request => request.Method == method;
-    }
-    
-    protected static Func<HttpRequestMessage, bool> AssertFormDataStringContent(string name, string value)
-    {
-        return request =>
-        {
-            if (request.Content is not MultipartFormDataContent content) return false;
-
-            var formData = content.FirstOrDefault(c =>
-                c is MultipartFormDataContent { Headers.ContentDisposition.Name: "formData" }) as MultipartFormDataContent;
-
-            if (formData is null) return false;
-            
-            return formData.Any(c => c is StringContent stringContent
-                                     && stringContent.Headers.ContentDisposition?.Name == name
-                                     && stringContent.ReadAsStringAsync().Result == value);
-            
-        };
     }
 }

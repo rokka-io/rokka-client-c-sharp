@@ -4,6 +4,8 @@ namespace rokka_client_c_sharp.Models.MetaData;
 
 public class CreateMetadata : MetaData<object>
 {
+    public override bool Suffixed => true;
+    
     public MetaDataUser? MetaUser 
     {
         get => Get() as MetaDataUser;

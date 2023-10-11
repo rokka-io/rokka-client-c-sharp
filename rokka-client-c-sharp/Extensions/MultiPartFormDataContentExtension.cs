@@ -20,7 +20,7 @@ public static class MultiPartFormDataContentExtension
             {
                 stringContent = JsonConvert.SerializeObject(keyValuePair.Value, StringExtension.JsonSerializerSettings);
             }
-            content.Add(new StringContent(stringContent), keyValuePair.Key);
+            content.Add(new StringContent(stringContent), $"{keyValuePair.Key.SnakeCase()}{(metadata.Suffixed ? "[0]" : string.Empty)}");
         }
     }
 }

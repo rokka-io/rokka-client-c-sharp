@@ -5,6 +5,7 @@ namespace rokka_client_c_sharp.Models.MetaData;
 
 public abstract class MetaData<T> : Dictionary<string, T>
 {
+    public virtual bool Suffixed => false;
     protected void Set(T value, [CallerMemberName]string name = "unknown")
     {
         Add(name.SnakeCase(), value);

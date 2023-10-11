@@ -17,10 +17,8 @@ public class SourceImageEndpoint : EndpointBase
         content.Add(new ByteArrayContent(bytes), "filedata", fileName);
         content.Add(new StringContent(fileName), "fileName");
         content.Add(new StringContent("filedata"), "name");
-        using var formData = new MultipartFormDataContent();
-        formData.AddRokkaMetadata(options);
-        formData.AddRokkaMetadata(metadata);
-        content.Add(formData, "formData");
+        content.AddRokkaMetadata(options);
+        content.AddRokkaMetadata(metadata);
         request.Content = content;
         return await RequestExecutor.PerformRequest(request);
     }

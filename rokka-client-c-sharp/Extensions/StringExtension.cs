@@ -5,7 +5,7 @@ namespace rokka_client_c_sharp.Extensions;
 
 public static class StringExtension
 {
-    public static readonly SnakeCaseNamingStrategy NamingStrategy = new();
+    public static readonly SnakeCaseNamingStrategy NamingStrategy = new(true, false);
     
     public static readonly JsonSerializerSettings JsonSerializerSettings = new()
     {
